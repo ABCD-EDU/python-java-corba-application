@@ -1,0 +1,8 @@
+module WordUnscramblerApp {
+    interface WordUnscrambler {
+            boolean logIn(in string username);
+            string requestWord();
+            boolean checkAnswer(in string answer);
+            string requestRescramble();
+    };
+};

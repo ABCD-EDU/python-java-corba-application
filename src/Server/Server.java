@@ -1,12 +1,25 @@
 import org.omg.CosNaming.*;
 import org.omg.CosNaming.NamingContextPackage.*;
+
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.File;
+import java.io.IOException;
 import java.util.Scanner;
+import java.util.Map;
+import java.util.List;
 import org.omg.CORBA.*;
 import org.omg.PortableServer.*;
 import org.omg.PortableServer.POA;
 import WordUnscramblerApp.*;
 
 public class Server {
+    // username, currentword
+    public static Map<String, String> userWordSet;
+    // contains all of the available words
+    public static List<String> wordSet;
+
+
     public static void main(String[] args) {
         try {
             ORB orb = ORB.init(args, null);
@@ -16,7 +29,7 @@ public class Server {
             rootpoa.the_POAManager().activate();
             
             // create servant and register it with the ORB
-            Implementation implementation = new Implementation();
+            WordUnscramblerImpl implementation = new WordUnscramblerImpl();
             
             // get object reference from the servant
             org.omg.CORBA.Object ref = rootpoa.servant_to_reference(implementation);
@@ -40,9 +53,35 @@ public class Server {
         } catch (Exception e) {
             e.printStackTrace();
         }
+
         Scanner in = new Scanner(System.in);
-        in.nextLine();
+        System.out.print("Enter the path for the word list file: ");
+        String path = in.nextLine();
+
+        readFile(path);
         System.out.println("Server exiting...");
     }
 
+    /**
+     * Takes a path and reads every line that contains one word only.
+     * All approved lines will then be inserted into the {@code wordSet} collection.
+     * @param path word file path
+     */
+    private static void readFile(String path) {
+        try (BufferedReader reader = new BufferedReader(new FileReader(new File(path)))) {
+            String line = "";
+            while (line != null) {
+                line = reader.readLine();
+                if (line == null) {
+                    break;
+                }
+
+                if (line.split(" ").length == 1) {
+                    wordSet.add(line);
+                }
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 }

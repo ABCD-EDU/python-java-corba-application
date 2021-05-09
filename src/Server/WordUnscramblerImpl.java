@@ -20,7 +20,12 @@ public class WordUnscramblerImpl extends WordUnscramblerPOA{
     public boolean checkAnswer(String username, String answer) {
         String currWord = Server.userWordSet.get(username);
         
-        return currWord.equalsIgnoreCase(answer);
+        if (currWord.equalsIgnoreCase(answer)) {
+            Server.leaderboards.put(username, Server.leaderboards.get(username)+1);
+            return true;
+        }
+
+        return false;
     }
     
     public String requestRescramble(String username) {

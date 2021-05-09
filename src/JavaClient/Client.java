@@ -24,10 +24,6 @@ public class Client {
             implementation = WordUnscramblerHelper.narrow(ncRef.resolve_str(name));
 
             System.out.println("Client successfuly connected");
-            System.out.println(implementation.logIn("true"));
-            System.out.println(implementation.checkAnswer("true"));
-            System.out.println(implementation.requestRescramble());
-            System.out.println(implementation.requestWord());
 
             Scanner in = new Scanner(System.in);
             in.nextLine();

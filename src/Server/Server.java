@@ -7,7 +7,9 @@ import java.io.File;
 import java.io.IOException;
 import java.util.Scanner;
 import java.util.Map;
+import java.util.HashMap;
 import java.util.List;
+import java.util.ArrayList;
 import org.omg.CORBA.*;
 import org.omg.PortableServer.*;
 import org.omg.PortableServer.POA;
@@ -18,7 +20,8 @@ public class Server {
     public static Map<String, String> userWordSet;
     // contains all of the available words
     public static List<String> wordSet;
-
+    // user leaderboards
+    public static Map<String, String> leaderboards;
 
     public static void main(String[] args) {
         try {
@@ -53,6 +56,10 @@ public class Server {
         } catch (Exception e) {
             e.printStackTrace();
         }
+
+        wordSet = new ArrayList<>();
+        userWordSet = new HashMap<>();
+        leaderboards = new HashMap<>();
 
         Scanner in = new Scanner(System.in);
         System.out.print("Enter the path for the word list file: ");

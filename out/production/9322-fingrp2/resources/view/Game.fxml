@@ -15,7 +15,7 @@
    <children>
       <VBox alignment="TOP_CENTER" prefHeight="540.0" prefWidth="580.0">
          <children>
-            <Label fx:id="warningField" text="Wrong answer. Try again!" textFill="#e75a7c">
+            <Label text="wrong answer! n tries available" textFill="#e75a7c" visible="false">
                <font>
                   <Font name="System Bold" size="16.0" />
                </font>

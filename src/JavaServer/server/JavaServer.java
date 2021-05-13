@@ -22,7 +22,7 @@ public class JavaServer {
     // contains all of the available words
     public static List<String> wordSet;
     // user leaderboards
-    public static Map<String, String> leaderboards;
+    public static Map<String, Integer> leaderboards;
 
     public static void main(String[] args) {
         try {

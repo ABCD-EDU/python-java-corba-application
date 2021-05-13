@@ -8,6 +8,7 @@ public class WordUnscramblerImpl extends WordUnscramblerPOA{
     
     public boolean logIn(String username) {
         JavaServer.userWordSet.put(username, "");
+        JavaServer.leaderboards.put(username, 0);
         return true;
     }
     
@@ -34,6 +35,11 @@ public class WordUnscramblerImpl extends WordUnscramblerPOA{
         String word = JavaServer.userWordSet.get(username);
 
         return scrambleWord(word);
+    }
+
+    @Override
+    public int requestScore(String username) {
+        return JavaServer.leaderboards.get(username);
     }
 
     private String scrambleWord(String word) {

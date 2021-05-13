@@ -34,6 +34,30 @@ public class GameController implements Initializable {
     public Label warningField;
 
     @FXML
+    public Label userScoreField;
+
+    @FXML
+    public Label livesField;
+
+    int lives = 5;
+
+    public void deductTries() {
+        if (lives != 0) {
+            lives--;
+            livesField.setText(livesField.getText() + "X");
+        } else {
+            try {
+                Stage window = (Stage) menuButton.getScene().getWindow();
+                window.setScene(new Scene(FXMLLoader.load(getClass()
+                        .getResource("../resources/view/Result.fxml"))));
+                window.show();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    @FXML
     public void submitAnswer() {
         boolean isCorrect = false;
         if (!answerField.getText().isEmpty()) {
@@ -46,9 +70,12 @@ public class GameController implements Initializable {
         if (isCorrect) {
             requestWord();
             rerollWord();
+            getScore();
             answerField.setText("");
+            warningField.setVisible(false);
         } else {
-//            warningField.setVisible(true);
+            deductTries();
+            warningField.setVisible(true);
         }
     }
 
@@ -77,9 +104,18 @@ public class GameController implements Initializable {
         wordField.setText(newWord);
     }
 
+    private void getScore() {
+        String user = User.username;
+        int score = User.impl.requestScore(user);
+        userScoreField.setText(user + " : " + score);
+    }
+
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         requestWord();
         rerollWord();
+        getScore();
+        warningField.setVisible(false);
+        livesField.setText("");
     }
 }

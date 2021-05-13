@@ -4,5 +4,6 @@ module WordUnscramblerApp {
             string requestWord(in string username);
             boolean checkAnswer(in string username, in string answer);
             string requestRescramble(in string username);
+            long requestScore(in string username);
     };
 };

@@ -4,13 +4,9 @@ import org.omg.CosNaming.*;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
-import java.io.File;
 import java.io.IOException;
-import java.util.Scanner;
-import java.util.Map;
-import java.util.HashMap;
-import java.util.List;
-import java.util.ArrayList;
+import java.util.*;
+
 import org.omg.CORBA.*;
 import org.omg.PortableServer.*;
 import org.omg.PortableServer.POA;
@@ -19,8 +15,10 @@ import WordUnscramblerApp.*;
 public class JavaServer {
     // username, currentword
     public static Map<String, String> userWordSet;
+    // container for users available words
+    public static Map<String, Map<Integer, Stack<String>>> userWordStack;
     // contains all of the available words
-    public static List<String> wordSet;
+    private static List<String> wordSet;
     // user leaderboards
     public static Map<String, Integer> leaderboards;
 
@@ -55,19 +53,21 @@ public class JavaServer {
             wordSet = new ArrayList<>();
             userWordSet = new HashMap<>();
             leaderboards = new HashMap<>();
+            userWordStack = new HashMap<>();
 
             Scanner in = new Scanner(System.in);
             System.out.print("Enter the path for the word list file: ");
             String filePath = in.nextLine();
 
             readFile(filePath);
-            System.out.println("Server exiting...");
 
             // wait for invocations from clients
             orb.run();
         } catch (Exception e) {
             e.printStackTrace();
         }
+
+        System.out.println("Server exiting...");
     }
 
     /**
@@ -76,9 +76,9 @@ public class JavaServer {
      * @param path word file path
      */
     private static void readFile(String path) {
-        try (BufferedReader reader = new BufferedReader(new FileReader(new File(path)))) {
+        try (BufferedReader reader = new BufferedReader(new FileReader(path))) {
             String line = "";
-            while (line != null) {
+            while (true) {
                 line = reader.readLine();
                 if (line == null) {
                     break;
@@ -91,5 +91,16 @@ public class JavaServer {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    public static Map<Integer, Stack<String>> sortWordSet() {
+        Map<Integer, Stack<String>> set = new HashMap<>();
+
+        Collections.shuffle(wordSet);
+        for (String word : wordSet) {
+            set.computeIfAbsent(word.length(), k -> new Stack<>()).add(word);
+        }
+
+        return set;
     }
 }

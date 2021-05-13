@@ -9,20 +9,27 @@ public class WordUnscramblerImpl extends WordUnscramblerPOA{
     public boolean logIn(String username) {
         JavaServer.userWordSet.put(username, "");
         JavaServer.leaderboards.put(username, 0);
+        JavaServer.userWordStack.put(username, JavaServer.sortWordSet());
         return true;
     }
     
     public String requestWord(String username) {
-        Random rand = new Random();
-
-        String word = JavaServer.wordSet.get(rand.nextInt(JavaServer.wordSet.size() - 1));
-        JavaServer.userWordSet.put(username, word);
-        return word;
+        for (int i = 1; i <= JavaServer.userWordStack.get(username).size(); i++) {
+            try {
+                String word = JavaServer.userWordStack.get(username).get(i).pop();
+                if (word != null) {
+                    JavaServer.userWordSet.put(username, word);
+                    return word;
+                }
+            } catch (NullPointerException ignored) {
+            }
+        }
+        return "";
     }
 
     public boolean checkAnswer(String username, String answer) {
         String currWord = JavaServer.userWordSet.get(username);
-        
+
         if (currWord.equalsIgnoreCase(answer)) {
             JavaServer.leaderboards.put(username, JavaServer.leaderboards.get(username)+1);
             return true;
@@ -34,7 +41,11 @@ public class WordUnscramblerImpl extends WordUnscramblerPOA{
     public String requestRescramble(String username) {
         String word = JavaServer.userWordSet.get(username);
 
-        return scrambleWord(word);
+        String scrambled = scrambleWord(word);
+        while (word.equalsIgnoreCase(scrambled)) {
+            scrambled = scrambleWord(word);
+        }
+        return scrambled;
     }
 
     @Override

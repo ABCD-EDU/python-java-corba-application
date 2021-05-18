@@ -1,6 +1,8 @@
 package server;
 
-import java.util.Random;
+import java.util.*;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import WordUnscramblerApp.*;
 
@@ -50,6 +52,8 @@ public class WordUnscramblerImpl extends WordUnscramblerPOA{
 
     @Override
     public int requestScore(String username) {
+        System.out.println(username);
+        System.out.println(JavaServer.leaderboards.size());
         return JavaServer.leaderboards.get(username);
     }
 
@@ -64,4 +68,28 @@ public class WordUnscramblerImpl extends WordUnscramblerPOA{
 
         return new String(a);
     }
+
+    public String getLeaderboardPosition(int index) {
+        if (index >= JavaServer.leaderboards.size())
+            return "";
+
+        List<Map.Entry<String, Integer>> scoreList = new ArrayList<>();
+
+        JavaServer.leaderboards.entrySet().stream()
+                .sorted(Map.Entry.comparingByValue(Comparator.reverseOrder()))
+                .forEach(scoreList::add);
+
+//        LinkedHashMap scoreList = JavaServer.leaderboards.entrySet().stream()
+//                .sorted(Map.Entry.comparingByValue(Comparator.reverseOrder()))
+//                .collect(Collectors.toMap(
+//                        Map.Entry::getKey,
+//                        Map.Entry::getValue,
+//                        (x,y)-> {throw new AssertionError();},
+//                        LinkedHashMap::new
+//                ));
+
+        Map.Entry<String, Integer> score = scoreList.get(index);
+        return score.getKey() + "%%%" + score.getValue();
+    }
+
 }

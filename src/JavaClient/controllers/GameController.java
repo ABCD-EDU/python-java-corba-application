@@ -39,7 +39,7 @@ public class GameController implements Initializable {
     @FXML
     public Label livesField;
 
-    int lives = 5;
+    int lives = 4;
 
     public void deductTries() {
         if (lives != 0) {

@@ -6,9 +6,11 @@ import javafx.fxml.Initializable;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
+import javafx.scene.input.KeyCode;
 import javafx.stage.Stage;
 import model.User;
 
+import java.awt.event.KeyEvent;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -37,6 +39,5 @@ public class MenuController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-
     }
 }

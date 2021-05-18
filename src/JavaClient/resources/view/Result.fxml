@@ -4,27 +4,56 @@
 <?import javafx.scene.Cursor?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane fx:id="resultPane" prefHeight="540.0" prefWidth="580.0" style="-fx-background-color: #F2F5EA;" xmlns="http://javafx.com/javafx/15.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.ResultController">
+<AnchorPane fx:id="resultPane" prefHeight="540.0" prefWidth="580.0" style="-fx-background-color: #F2F5EA;" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.ResultController">
    <children>
       <VBox alignment="TOP_CENTER" layoutX="2.0" prefHeight="540.0" prefWidth="580.0">
          <children>
-            <Label fx:id="resultLabel" text="YOU WIN!" textFill="#e75a7c">
+            <Label fx:id="resultLabel" text="RESULTS" textFill="#e75a7c">
                <font>
-                  <Font name="System Bold" size="60.0" />
+                  <Font name="System Bold" size="31.0" />
                </font>
                <VBox.margin>
-                  <Insets bottom="40.0" top="200.0" />
+                  <Insets bottom="40.0" top="20.0" />
                </VBox.margin>
             </Label>
+            <HBox alignment="TOP_CENTER" prefHeight="35.0" prefWidth="580.0">
+               <children>
+                  <VBox alignment="TOP_CENTER" prefHeight="100.0" prefWidth="784.0" style="-fx-border-color: 2C363F; -fx-border-width: 3;">
+                     <children>
+                        <Label text="Score">
+                           <font>
+                              <Font name="System Bold" size="20.0" />
+                           </font>
+                        </Label>
+                     </children>
+                  </VBox>
+                  <VBox alignment="TOP_CENTER" prefHeight="100.0" prefWidth="783.0" style="-fx-border-color: 2C363F; -fx-border-width: 3;">
+                     <children>
+                        <Label text="Name">
+                           <font>
+                              <Font name="System Bold" size="20.0" />
+                           </font>
+                        </Label>
+                     </children>
+                  </VBox>
+               </children>
+            </HBox>
+            <HBox alignment="TOP_CENTER" prefHeight="258.0" prefWidth="580.0">
+               <children>
+                  <VBox fx:id="scoreBox" alignment="TOP_CENTER" prefHeight="100.0" prefWidth="784.0" style="-fx-border-color: 2C363F; -fx-border-width: 3;" />
+                  <VBox fx:id="nameBox" alignment="TOP_CENTER" prefHeight="100.0" prefWidth="783.0" style="-fx-border-color: 2C363F; -fx-border-width: 3;" />
+               </children>
+            </HBox>
             <Label fx:id="playAgainButton" onMouseClicked="#playAgain" text="play again">
                <font>
                   <Font size="24.0" />
                </font>
                <VBox.margin>
-                  <Insets bottom="5.0" />
+                  <Insets bottom="5.0" top="10.0" />
                </VBox.margin>
                <cursor>
                   <Cursor fx:constant="HAND" />

@@ -5,5 +5,6 @@ module WordUnscramblerApp {
             boolean checkAnswer(in string username, in string answer);
             string requestRescramble(in string username);
             long requestScore(in string username);
+            string getLeaderboardPosition(in long index);
     };
 };

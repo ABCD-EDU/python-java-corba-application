@@ -1,61 +1,50 @@
-import Tkinter as tk
+import tkinter as tk
+from tkinter import *
 # import ORBConnector as oc
 
 # create orb connection
 # con = oc.ORBConnector()
 
-window = tk.Tk()
-window.configure(bg="#F2F5EA")
+class SignInScreen(Frame):
+    def loginClick(self, name):
+        if name:
+            pass
+            # con.eo.logIn(name)
 
-def createRobotoFont(text="", color="", size=12, style="", height=0):
-    label = tk.Label(
-        text=text,
-        fg=color,
-        font="Roboto {0} {1}".format(size,style),
-        height=height
-    )
+        # change window
 
-    return label
+    def createSignInScreen(self):
+        # creates the word scrambler label
+        gameLabel = Label(
+            text="WORD SCRAMBLER",
+            fg="#2C363F",
+            font="Roboto 30 bold",
+        )
 
-def loginClick(name):
-    print(name)
-    if name:
-        pass
-        # con.eo.logIn(name)
+        gameLabel.pack(pady=(100,30), padx=(60,60))
 
-    # change window
+        #creates the login textfield
+        userEntry = tk.Entry(bg="#F2F5EA", width=50)
+        userEntry.pack(pady=(20,20))
 
-def createSignInScreen():
-    # creates the word scrambler label
-    gameLabel = createRobotoFont(
-        text="WORD SCRAMBLER",
-        size=30, 
-        color="#2C363F",
-        style="bold",
-    )
+        #creates the login button
+        playButton = tk.Button(
+            command=self.loginClick(userEntry.get()),
+            text="PLAY!",
+            width=42,
+            heigh=2,
+            bg="#E75A7C",
+            fg="#fff"
+        )
+        playButton.pack(pady=(0,100))
 
-    gameLabel.pack(pady=(100,30), padx=(60,60))
+    def __init__(self, master=None):
+        Frame.__init__(self, master)
+        self.pack()
+        self.createSignInScreen()
 
-    # Input user name prompt label
-    inputNameLabel = tk.Label()
-
-    #creates the login textfield
-    userEntry = tk.Entry(bg="@", width=50)
-    userEntry.pack(pady=(20,20))
-
-    #creates the login button
-    playButton = tk.Button(
-        command=loginClick(userEntry.get()),
-        text="PLAY!",
-        width=42,
-        heigh=2,
-        bg="#E75A7C",
-        fg="#fff"
-    )
-    playButton.pack(pady=(0,100))
-
-def run():
-    createSignInScreen()
-    window.mainloop()    
-
-run()
+if __name__ == "__main__":
+    root = Tk()
+    app = SignInScreen(master=root)
+    app.mainloop()
+    root.destroy()

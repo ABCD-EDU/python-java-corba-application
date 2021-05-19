@@ -36,8 +36,11 @@ def createSignInScreen():
 
     gameLabel.pack(pady=(100,30), padx=(60,60))
 
+    # Input user name prompt label
+    inputNameLabel = tk.Label()
+
     #creates the login textfield
-    userEntry = tk.Entry(bg="#F2F5EA", width=50)
+    userEntry = tk.Entry(bg="@", width=50)
     userEntry.pack(pady=(20,20))
 
     #creates the login button
@@ -53,6 +56,6 @@ def createSignInScreen():
 
 def run():
     createSignInScreen()
-    window.mainloop()
+    window.mainloop()    
 
 run()

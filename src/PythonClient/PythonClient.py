@@ -1,5 +1,5 @@
-import tkinter as tk
-from tkinter import *
+import Tkinter as tk
+from Tkinter import *
 # import ORBConnector as oc
 
 # create orb connection
@@ -36,7 +36,7 @@ class SignInScreen(Frame):
             bg="#E75A7C",
             fg="#fff"
         )
-        playButton.pack(pady=(0,100))
+        playButton.pack(pady=(0,100))   
 
     def __init__(self, master=None):
         Frame.__init__(self, master)

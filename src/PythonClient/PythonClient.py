@@ -1,11 +1,63 @@
 import Tkinter as tk
 from Tkinter import *
-# import ORBConnector as oc
+import ORBConnector as oc
 
 # create orb connection
-# con = oc.ORBConnector()
+con = oc.ORBConnector()
+
+currName = ""
+currScore = 0
+
+class ScreenController(Tk):
+    def __init__(self):
+        Tk.__init__(self)
+        # the container is where we'll stack a bunch of frames
+        # on top of each other, then the one we want visible
+        # will be raised above the others
+        container = tk.Frame(self)
+        container.pack(side="top", fill="both", expand=True)
+        container.grid_rowconfigure(0, weight=1)
+        container.grid_columnconfigure(0, weight=1)
+
+        self.frames = {}
+        for F in (SignInScreen, GameScreen, ResultScreen):
+            page_name = F.__name__
+            frame = F(master=container, controller=self)
+            self.frames[page_name] = frame
+
+            # put all of the pages in the same location;
+            # the one on the top of the stacking order
+            # will be the one that is visible.
+            frame.grid(row=0, column=0, sticky="nsew")
+
+        self.show_frame(SignInScreen.__name__)
+
+    def show_frame(self, page_name):
+        '''Show a frame for the given page name'''
+        frame = self.frames[page_name]
+        frame.tkraise()        
 
 class GameScreen(Frame):
+    def __init__(self, master=None, controller=None):
+        Frame.__init__(self, master)
+        self.controller = controller
+        self.configure(bg="#F2F5EA")
+        self.pack()
+        self.createGameScreen()
+
+    def submitWordPress(self):
+        global con
+        global currName
+        isCorrect = con.checkAnswer(currName, self.guessEntry.get())
+        if
+
+    def menuButtonPress(self):
+        print('test')
+        self.controller.show_frame(SignInScreen.__name__)
+
+    def rerollButtonPress(self):
+        pass
+
     def createGameScreen(self):
         # Tries label
         triesCountLabel = tk.Label(
@@ -31,7 +83,7 @@ class GameScreen(Frame):
 
         menuButton = tk.Button(
             self,
-            # command=pass,
+            command=self.menuButtonPress,
             text="menu",
             font="Roboto 12 bold",
             bg="#F2F5EA",
@@ -45,7 +97,7 @@ class GameScreen(Frame):
         # Reroll
         rerollButton = tk.Button(
             self,
-            # command=goToMenu(),
+            command=self.rerollButtonPress,
             text="reroll",
             font="Roboto 12 bold",
             bg="#F2F5EA",
@@ -93,13 +145,13 @@ class GameScreen(Frame):
         # End prompt
 
         # User guess entry
-        guessEntry = tk.Entry(
+        self.guessEntry = tk.Entry(
             self,
             font=('Roboto', 20, 'normal'),
             bg="#F2F5EA", 
             width=25
             )
-        guessEntry.grid(row=7, column=0, columnspan=6, pady=(2, 5), padx=(10,10))
+        self.guessEntry.grid(row=7, column=0, columnspan=6, pady=(2, 5), padx=(10,10))
         # End
 
         submitButton = tk.Button(
@@ -126,24 +178,31 @@ class GameScreen(Frame):
         )
         resultMessageLabel.grid(row=9, column=0, columnspan=8, pady=(20,20), padx=(10,10))
         # End result
-    
-    def __init__(self, master=None):
-        Frame.__init__(self, master)
-        self.configure(bg="#F2F5EA")
-        self.pack()
-        self.createGameScreen()
 
 class SignInScreen(Frame):
-    def loginClick(self, name):
-        if name:
-            pass
-            # con.eo.logIn(name)
+    def __init__(self, master=None, controller=None):
+        Frame.__init__(self, master)
+        self.controller=controller
+        self.configure(bg="#F2F5EA")
+        self.pack()
+        self.createSignInScreen()
+    
+    def loginClick(self):
+        name = self.userEntry.get()
+        if name: 
+            global currName
+            currName = name
 
-        # change window
+            global con
+            con.eo.logIn(name)
+
+            # change window
+            self.controller.show_frame(ResultScreen.__name__)
 
     def createSignInScreen(self):
         # creates the word scrambler label
         gameLabel = Label(
+            self,
             text="WORD SCRAMBLER",
             fg="#2C363F",
             font="Roboto 30 bold",
@@ -152,12 +211,16 @@ class SignInScreen(Frame):
         gameLabel.pack(pady=(100,30), padx=(60,60))
 
         #creates the login textfield
-        userEntry = tk.Entry(bg="#F2F5EA", width=50)
-        userEntry.pack(pady=(20,20))
+        self.userEntry = tk.Entry(
+            self,
+            bg="#F2F5EA",
+            width=50)
+        self.userEntry.pack(pady=(20,20))
 
         #creates the login button
         playButton = tk.Button(
-            command=self.loginClick(userEntry.get()),
+            self,
+            command=self.loginClick,
             text="PLAY!",
             width=42,
             heigh=2,
@@ -166,16 +229,21 @@ class SignInScreen(Frame):
         )
         playButton.pack(pady=(0,50))   
 
-    def __init__(self, master=None):
+class ResultScreen(Frame):
+    def __init__(self, master=None, controller=None):
         Frame.__init__(self, master)
+        self.controller = controller
         self.configure(bg="#F2F5EA")
         self.pack()
-        self.createSignInScreen()
+        self.createResultScreen()
 
-class ResultScreen(Frame):
+    def menuButtonPress():
+        self.controller.show_frame(GameScreen.__name__)
+
     def createResultScreen(self):
          # creates the score label
         scoreLabel = Label(
+            self,
             text="Final Score: 0",
             fg="#2C363F",
             font="Roboto 15 bold",
@@ -185,6 +253,7 @@ class ResultScreen(Frame):
 
          # creates the score label
         endLabel = Label(
+            self,
             text="GAME OVER!",
             fg="#E75A7C",
             font="Roboto 30 bold",
@@ -192,18 +261,35 @@ class ResultScreen(Frame):
 
         endLabel.pack(pady=(0,15), padx=(100,100))
 
-    def __init__(self, master=None):
-        Frame.__init__(self, master)
-        self.configure(bg="#F2F5EA")
-        self.pack()
-        self.createResultScreen()
+        menuButton = tk.Button(
+            self,
+            command=self.menuButtonPress,
+            text="menu",
+            font="Roboto 12 bold",
+            bg="#F2F5EA",
+            fg="#000000",
+            width=20,
+            borderwidth=0
+        )
+        menuButton.pack(padx=(100,100))
+
+        exitButton = tk.Button(
+            self,
+            command=self.menuButtonPress,
+            text="exit",
+            font="Roboto 12 bold",
+            bg="#F2F5EA",
+            fg="#000000",
+            width=20,
+            borderwidth=0
+        )
+
+        exitButton.pack(pady=(10,30), padx=(100,100))
 
 if __name__ == "__main__":
-    root = Tk()
+    root = ScreenController()
     root.configure(bg="#F2F5EA")
     root.resizable(False, False)
     root.geometry("580x540")
-
-    app = GameScreen(master=root)
-    app.mainloop()
+    root.mainloop()
     root.destroy()

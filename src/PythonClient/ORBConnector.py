@@ -6,7 +6,7 @@ import sys
 class ORBConnector():
     # TODO: INSTEAD OF ARGS, USE CONFIG FILE
     def __init__(self, args=sys.argsv):
-        orb = CORBA.ORB_init(args, CORBA.ORB_ID)
+        self.orb = CORBA.ORB_init(args, CORBA.ORB_ID)
         print("----------------------")
         print("CLIENT STARTING...")
         print("----------------------")
@@ -33,8 +33,8 @@ class ORBConnector():
 
         self.eo = eo
 
-    def close(self, orb):
-        orb.destroy()
+    def close(self):
+        self.orb.destroy()
 
 # if __name__ == "__main__":
 #     ORBConnector(sys.argv)

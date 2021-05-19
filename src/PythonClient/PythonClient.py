@@ -74,7 +74,8 @@ class GameScreen(Frame):
         else:
             lives = 5
             self.resultMessageLabel['fg'] = "#F2F5EA"
-            self.controller.show_frame(ResultScreen.__name__)
+            frame = self.controller.show_frame(ResultScreen.__name__)
+            frame.initData(frame)
 
     def requestWord(self):
         global currName
@@ -88,17 +89,14 @@ class GameScreen(Frame):
         global con
 
         scrambledWord = con.getEO().requestRescramble(currName)
-        print(scrambledWord)
         self.scrambledWordLabel.config(text=scrambledWord)
 
     def requestScore(self):
-        print('request score')
         global currName
         global currScore
         global con
 
         currScore = con.getEO().requestScore(currName) 
-        print(currScore)
         self.userScoreLabel.config(text="Score : {1}".format(1,currScore))
 
     def menuButtonPress(self):
@@ -238,6 +236,7 @@ class GameScreen(Frame):
             self.rerollWord()
             self.requestScore()
 
+            self.guessEntry.delete(0,'end')
             self.triesCountLabel.configure(text="")
 
 class SignInScreen(Frame):
@@ -255,7 +254,7 @@ class SignInScreen(Frame):
             currName = name
 
             global con
-            print(con.getEO().logIn(name))
+            con.getEO().logIn(name)
 
             # change window
             frame = self.controller.show_frame(GameScreen.__name__)
@@ -299,6 +298,13 @@ class ResultScreen(Frame):
         self.pack()
         self.createResultScreen()
 
+    @staticmethod
+    def initData(self):
+        global currScore
+        global currName
+
+        self.scoreLabel['text'] = "Final Score: {1}".format(1, currScore)
+
     def menuButtonPress(self):
         global currName
         global currScore
@@ -307,31 +313,35 @@ class ResultScreen(Frame):
         currScore = 0
 
         self.controller.show_frame(SignInScreen.__name__)
+    
+    def playAgainPress(self):
+        frame = self.controller.show_frame(GameScreen.__name__)
+        frame.initData(frame)
 
     def createResultScreen(self):
          # creates the score label
-        scoreLabel = Label(
+        self.scoreLabel = Label(
             self,
             text="Final Score: 0",
             fg="#2C363F",
             font="Roboto 15 bold",
         )
 
-        scoreLabel.pack(pady=(70,15), padx=(100,100))
+        self.scoreLabel.pack(pady=(70,15), padx=(100,100))
 
          # creates the score label
-        endLabel = Label(
+        self.endLabel = Label(
             self,
             text="GAME OVER!",
             fg="#E75A7C",
             font="Roboto 30 bold",
         )
 
-        endLabel.pack(pady=(0,15), padx=(100,100))
+        self.endLabel.pack(pady=(0,15), padx=(100,100))
 
-        menuButton = tk.Button(
+        self.playAgainButton = tk.Button(
             self,
-            command=self.menuButtonPress,
+            command=self.playAgainPress,
             text="menu",
             font="Roboto 12 bold",
             bg="#F2F5EA",
@@ -339,9 +349,9 @@ class ResultScreen(Frame):
             width=20,
             borderwidth=0
         )
-        menuButton.pack(padx=(100,100))
+        self.playAgainButton.pack(padx=(100,100))
 
-        exitButton = tk.Button(
+        self.exitButton = tk.Button(
             self,
             command=self.menuButtonPress,
             text="exit",
@@ -352,7 +362,7 @@ class ResultScreen(Frame):
             borderwidth=0
         )
 
-        exitButton.pack(pady=(10,30), padx=(100,100))
+        self.exitButton.pack(pady=(10,30), padx=(100,100))
 
 if __name__ == "__main__":
     root = ScreenController()

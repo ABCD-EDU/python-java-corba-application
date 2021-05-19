@@ -5,33 +5,38 @@ import sys
 
 class ORBConnector():
     # TODO: INSTEAD OF ARGS, USE CONFIG FILE
-    def __init__(self, args=sys.argsv):
+    def __init__(self, args):
         self.orb = CORBA.ORB_init(args, CORBA.ORB_ID)
         print("----------------------")
         print("CLIENT STARTING...")
         print("----------------------")
 
-        obj = orb.resolve_initial_references("NameService")
-        rootContext = obj._narrow(CosNaming.NamingContext)
+        self.obj = self.orb.resolve_initial_references("NameService")
+        self.rootContext = self.obj._narrow(CosNaming.NamingContext)
 
-        if rootContext is None:
+        if self.rootContext is None:
             print ("Failed to narrow the root naming context")
             sys.exit(1)
 
-        name = [CosNaming.NameComponent("Hello", ""), ]
+        self.name = [CosNaming.NameComponent("Hello", ""), ]
         try:
-            obj = rootContext.resolve(name)
+            self.obj = self.rootContext.resolve(self.name)
         except CosNaming.NamingContext.NotFound as ex:
             print ("Name not found")
             sys.exit(1)
 
-        eo = obj._narrow(WordUnscramblerApp.WordUnscrambler)
+        self.eo = self.obj._narrow(WordUnscramblerApp.WordUnscrambler)
 
-        if eo is None:
+        if self.eo is None:
             print ("Object reference is not an WordUnscramblerApp::WordUnscrambler")
             sys.exit(1)
 
-        self.eo = eo
+        print(self.eo.logIn("lance"))
+        print(self.eo.requestWord("lance"))
+
+
+    def getEO(self):
+        return self.eo
 
     def close(self):
         self.orb.destroy()

@@ -1,13 +1,15 @@
 import Tkinter as tk
 from Tkinter import *
 import ORBConnector as oc
+import sys
 
 # create orb connection
-con = oc.ORBConnector()
+con = oc.ORBConnector(sys.argv)
 
 currName = ""
 currScore = 0
-
+lives = 5
+root = None
 class ScreenController(Tk):
     def __init__(self):
         Tk.__init__(self)
@@ -35,7 +37,10 @@ class ScreenController(Tk):
     def show_frame(self, page_name):
         '''Show a frame for the given page name'''
         frame = self.frames[page_name]
+        global root
+        # frame.__init__(self, root)
         frame.tkraise()        
+        return frame
 
 class GameScreen(Frame):
     def __init__(self, master=None, controller=None):
@@ -48,19 +53,65 @@ class GameScreen(Frame):
     def submitWordPress(self):
         global con
         global currName
-        isCorrect = con.checkAnswer(currName, self.guessEntry.get())
-        if
+        isCorrect = con.getEO().checkAnswer(currName, self.guessEntry.get())
+        if isCorrect:
+            self.guessEntry.delete(0,'end')
+            self.requestWord()
+            self.rerollWord()
+            self.requestScore()
+            self.guessEntry.configure(text="")
+            self.resultMessageLabel['fg'] = "#F2F5EA"
+        else:
+            self.deductTries();
+            self.resultMessageLabel['fg'] = "#E75A7C"
+
+    def deductTries(self):
+        global lives
+        if (lives != 0):
+            lives -= 1
+            currLives = self.triesCountLabel.cget("text")
+            self.triesCountLabel['text'] = currLives + 'X'
+        else:
+            lives = 5
+            self.resultMessageLabel['fg'] = "#F2F5EA"
+            self.controller.show_frame(ResultScreen.__name__)
+
+    def requestWord(self):
+        global currName
+        global con
+
+        newWord = con.getEO().requestWord(currName)
+        self.scrambledWordLabel.config(text=newWord)
+
+    def rerollWord(self):
+        global currName
+        global con
+
+        scrambledWord = con.getEO().requestRescramble(currName)
+        print(scrambledWord)
+        self.scrambledWordLabel.config(text=scrambledWord)
+
+    def requestScore(self):
+        print('request score')
+        global currName
+        global currScore
+        global con
+
+        currScore = con.getEO().requestScore(currName) 
+        print(currScore)
+        self.userScoreLabel.config(text="Score : {1}".format(1,currScore))
 
     def menuButtonPress(self):
-        print('test')
+        global currScore
+        global currName
+        
+        currName = ""
+        currScore = 0
         self.controller.show_frame(SignInScreen.__name__)
-
-    def rerollButtonPress(self):
-        pass
 
     def createGameScreen(self):
         # Tries label
-        triesCountLabel = tk.Label(
+        self.triesCountLabel = tk.Label(
             self,
             text="X",
             font="Roboto 30 bold",
@@ -68,20 +119,20 @@ class GameScreen(Frame):
             bg="#F2F5EA"
         )
 
-        triesCountLabel.grid(row=0, column=2, pady=(30,0), padx=(10,10))
+        self.triesCountLabel.grid(row=0, column=2, pady=(30,0))
         # End of tries label...
 
         # Score label
-        userScoreLabel = tk.Label(
+        self.userScoreLabel = tk.Label(
             self,
             text="Score: ",
             font="Roboto 12 bold",
             fg="#000000",
             bg="#F2F5EA"
         )
-        userScoreLabel.grid(row=1, column=2, pady=(5, 10), padx=(10,10))
+        self.userScoreLabel.grid(row=1, column=2, pady=(5, 10), padx=(10,10))
 
-        menuButton = tk.Button(
+        self.menuButton = tk.Button(
             self,
             command=self.menuButtonPress,
             text="menu",
@@ -91,13 +142,13 @@ class GameScreen(Frame):
             width=20,
             borderwidth=0
         )
-        menuButton.grid(row=2, column=0, columnspan=1, pady=(10, 10))
+        self.menuButton.grid(row=2, column=0, columnspan=1, pady=(10, 10))
         # # End of menu button
 
         # Reroll
-        rerollButton = tk.Button(
+        self.rerollButton = tk.Button(
             self,
-            command=self.rerollButtonPress,
+            command=self.rerollWord,
             text="reroll",
             font="Roboto 12 bold",
             bg="#F2F5EA",
@@ -105,11 +156,11 @@ class GameScreen(Frame):
             width=20,
             borderwidth=0
         )
-        rerollButton.grid(row=2, column=5, columnspan=1, pady=(10, 10))
+        self.rerollButton.grid(row=2, column=5, columnspan=1, pady=(10, 10))
         # end of reroll
 
         # Scramble Label
-        scrambleLabel = tk.Label(
+        self.scrambleLabel = tk.Label(
             self,
             text="Scrambled Word:",
             font="Roboto 15 normal",
@@ -117,11 +168,11 @@ class GameScreen(Frame):
             fg="#000000",
             bg="#F2F5EA"
         )
-        scrambleLabel.grid(row=3, column=0, columnspan=8, pady=(0, 2),  padx=(10,10))
+        self.scrambleLabel.grid(row=3, column=0, columnspan=8, pady=(0, 2),  padx=(10,10))
         # End of scramble label
 
         # Scramble word to guess label
-        scrambledWordLabel = tk.Label(
+        self.scrambledWordLabel = tk.Label(
             self,
             text="none",
             font="Roboto 25 bold",
@@ -129,11 +180,11 @@ class GameScreen(Frame):
             fg="#000000",
             bg="#F2F5EA"
         )
-        scrambledWordLabel.grid(row=4, column=0, columnspan=8, pady=(2,0), padx=(10,10))
+        self.scrambledWordLabel.grid(row=4, column=0, columnspan=8, pady=(2,0), padx=(10,10))
         # End scrambled word to guess label
 
         # Input Guess Prompt Label
-        guessPromptLabel = tk.Label(
+        self.guessPromptLabel = tk.Label(
             self,
             text="Enter your Answer:",
             font="Roboto 15 normal",
@@ -141,7 +192,7 @@ class GameScreen(Frame):
             fg="#000000",
             bg="#F2F5EA"
         )
-        guessPromptLabel.grid(row=6, column=0, columnspan=6, pady=(30, 2), padx=(10,10))
+        self.guessPromptLabel.grid(row=6, column=0, columnspan=6, pady=(30, 2), padx=(10,10))
         # End prompt
 
         # User guess entry
@@ -154,9 +205,9 @@ class GameScreen(Frame):
         self.guessEntry.grid(row=7, column=0, columnspan=6, pady=(2, 5), padx=(10,10))
         # End
 
-        submitButton = tk.Button(
+        self.submitButton = tk.Button(
             self,
-            # command=onSubmit(),
+            command=self.submitWordPress,
             text="SUBMIT!",
             width=30,
             heigh=1,
@@ -165,19 +216,29 @@ class GameScreen(Frame):
             fg="#fff"
         )
 
-        submitButton.grid(row=8, column=0, columnspan=6, pady=(5, 10), padx=(10,10))
+        self.submitButton.grid(row=8, column=0, columnspan=6, pady=(5, 10), padx=(10,10))
         # End
 
         # result message label
-        resultMessageLabel = tk.Label(
+        self.resultMessageLabel = tk.Label(
             self,
             text= "Wrong answer. Try again!",
             font="Roboto 12 bold",
-            fg="#E75A7C",
+            fg="#F2F5EA",
             bg="#F2F5EA"
         )
-        resultMessageLabel.grid(row=9, column=0, columnspan=8, pady=(20,20), padx=(10,10))
+        self.resultMessageLabel.grid(row=9, column=0, columnspan=8, pady=(20,20), padx=(10,10))
         # End result
+
+    @staticmethod
+    def initData(self):
+        global currName
+        if currName is not "":
+            self.requestWord()
+            self.rerollWord()
+            self.requestScore()
+
+            self.triesCountLabel.configure(text="")
 
 class SignInScreen(Frame):
     def __init__(self, master=None, controller=None):
@@ -194,10 +255,11 @@ class SignInScreen(Frame):
             currName = name
 
             global con
-            con.eo.logIn(name)
+            print(con.getEO().logIn(name))
 
             # change window
-            self.controller.show_frame(ResultScreen.__name__)
+            frame = self.controller.show_frame(GameScreen.__name__)
+            frame.initData(frame)
 
     def createSignInScreen(self):
         # creates the word scrambler label
@@ -237,8 +299,14 @@ class ResultScreen(Frame):
         self.pack()
         self.createResultScreen()
 
-    def menuButtonPress():
-        self.controller.show_frame(GameScreen.__name__)
+    def menuButtonPress(self):
+        global currName
+        global currScore
+
+        currName = ""
+        currScore = 0
+
+        self.controller.show_frame(SignInScreen.__name__)
 
     def createResultScreen(self):
          # creates the score label

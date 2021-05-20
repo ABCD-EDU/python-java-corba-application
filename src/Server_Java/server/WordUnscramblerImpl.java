@@ -21,6 +21,7 @@ public class WordUnscramblerImpl extends WordUnscramblerPOA{
                 maxSize = set.getKey();
             }
         }
+        System.out.println(maxSize);
 
         for (int i = 1; i <= maxSize; i++) {
             try {
@@ -29,7 +30,7 @@ public class WordUnscramblerImpl extends WordUnscramblerPOA{
                     JavaServer.userWordSet.put(username, word);
                     return word;
                 }
-            } catch (NullPointerException ignored) {
+            } catch (Exception ignored) {
             }
         }
         return "";

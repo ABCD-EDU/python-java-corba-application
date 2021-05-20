@@ -4,15 +4,21 @@
 ### How to run Java Server
 1. Go to `out/production/9322-fingrp2` using your terminal (`<path-to-out/production/9322-fingrp2>`)
 2. Start the ORB by typing in `orbd -ORBInitialPort 1050`
-3. Start the JavaServer by typing in `java server.JavaServer -ORBInitialPort 1050 -ORBInitialHost localhost` or  `start java server.JavaServer -ORBInitialPort 1050 -ORBInitialHost localhost`
+3. Start the JavaServer by typing in `java server.JavaServer`. If the server doesn't run due to params use `java server.JavaServer -ORBInitialPort 1050 -ORBInitialHost localhost` or  `start java server.JavaServer -ORBInitialPort 1050 -ORBInitialHost localhost`
 4. Soon after starting the server, the terminal will ask for a path leading to the text file to be used by the game.
 5. Input the path of words.txt from the bin folder and press enter.
 
 
 ### How to run Java Client
 1. Go to `out/production/9322-fingrp2` using your terminal (`cd path`)
-2. Start the JavaClient by typing in `java ClientExecutable -ORBInitialPort 1050 -ORBInitialHost localhost` or `start java ClientExecutable -ORBInitialPort 1050 -ORBInitialHost localhost`
+2. Start the JavaClient by typing in `java ClientExecutable`. If the client doesn't run due to params use `java ClientExecutable -ORBInitialPort 1050 -ORBInitialHost localhost` or `start java ClientExecutable -ORBInitialPort 1050 -ORBInitialHost localhost`
 3. Press enter in the terminal.
+
+### How to run Python Client
+1. Set path using `set PYTHONPATH=<omniorbpy-path>\lib\python;<omniorbpy-path>\lib\x86_win32`
+(Where the <omniorbpy-path> environment variable is the root of your omniORB folder.)
+
+2. Run `python ClientExecutable.py`. If errors in params occur, use `python ClientExecutable.py -ORBInitRef NameService=corbaname::<ADDRESS>:<PORT>`
 
 ## Compiling the Project
 #### Java Server

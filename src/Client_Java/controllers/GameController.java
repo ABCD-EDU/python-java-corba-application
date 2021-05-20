@@ -49,6 +49,7 @@ public class GameController implements Initializable {
             livesField.setText(livesField.getText() + "X");
         } else {
             try {
+                User.finished = false;
                 Stage window = (Stage) menuButton.getScene().getWindow();
                 window.setScene(new Scene(FXMLLoader.load(getClass()
                         .getResource("../resources/view/Result.fxml"))));
@@ -110,6 +111,7 @@ public class GameController implements Initializable {
         String newWord = User.impl.requestWord(user);
         if (newWord.equals("")) {
             try {
+                User.finished = true;
                 Stage window = (Stage) menuButton.getScene().getWindow();
                 window.setScene(new Scene(FXMLLoader.load(getClass()
                         .getResource("../resources/view/Result.fxml"))));

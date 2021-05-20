@@ -83,6 +83,9 @@ class GameScreen(Frame):
         global con
 
         newWord = con.getEO().requestWord(currName)
+        if newWord == "":
+            frame = self.controller.show_frame(ResultScreen.__name__)
+            frame.initData(frame)
         self.scrambledWordLabel.config(text=newWord)
 
     def rerollWord(self):
@@ -307,6 +310,8 @@ class ResultScreen(Frame):
         global currScore
         global currName
 
+        global con
+        currScore = con.getEO().requestScore(currName)
         self.scoreLabel['text'] = "Final Score: {1}".format(1, currScore)
 
     def exitButtonPress(self):

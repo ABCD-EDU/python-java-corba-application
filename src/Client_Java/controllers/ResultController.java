@@ -22,6 +22,8 @@ import java.util.ResourceBundle;
 public class ResultController implements Initializable {
     public VBox scoreBox;
     public VBox nameBox;
+    public Label nameHeader;
+    public Label scoreHeader;
     @FXML
     private Label resultLabel;
 
@@ -55,6 +57,19 @@ public class ResultController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
+        if (User.finished) {
+            // set to winning
+            resultPane.setStyle("-fx-background-color: #F2F5EA");
+            resultLabel.setText("YOU WON!");
+        } else {
+            // set to losing
+            resultPane.setStyle("-fx-background-color: #2C363F");
+            resultLabel.setText("GAME OVER!");
+            playAgainButton.setStyle("-fx-text-fill: #F2F5EA");
+            exitButton.setStyle("-fx-text-fill: #F2F5EA");
+            nameHeader.setStyle("-fx-text-fill: #F2F5EA");
+            scoreHeader.setStyle("-fx-text-fill: #F2F5EA");
+        }
         for (int i = 0; i < 10 ; i++) {
             String req = User.impl.getLeaderboardPosition(i);
             if (!req.equals("")) {
@@ -68,6 +83,11 @@ public class ResultController implements Initializable {
 
                 Label scoreLabel = new Label(score);
                 scoreLabel.setFont(new Font("System Bold", 20.0));
+
+                if (!User.finished) {
+                    scoreLabel.setStyle("-fx-text-fill: #F2F5EA");
+                    nameLabel.setStyle("-fx-text-fill: #F2F5EA");
+                }
 
                 scoreBox.getChildren().add(scoreLabel);
                 nameBox.getChildren().add(nameLabel);

@@ -29,7 +29,7 @@
                   <Insets bottom="9.0" />
                </VBox.margin>
             </Label>
-            <TextField fx:id="loginField" prefHeight="45.0" style="-fx-background-color: #F2F5EA; -fx-border-color: #2C363F; -fx-border-width: 2; -fx-border-radius: 5;">
+            <TextField fx:id="loginField" onKeyPressed="#onEnterPress" prefHeight="45.0" style="-fx-background-color: #F2F5EA; -fx-border-color: #2C363F; -fx-border-width: 2; -fx-border-radius: 5;">
                <VBox.margin>
                   <Insets bottom="20.0" left="115.0" right="115.0" />
                </VBox.margin>
@@ -37,7 +37,7 @@
                   <Font name="System Bold" size="16.0" />
                </font>
             </TextField>
-            <Button fx:id="loginButton" onMouseClicked="#loginPressed" maxWidth="350.0" mnemonicParsing="false" prefHeight="45.0" style="-fx-background-color: #E75A7C; -fx-background-radius: 5;" text="PLAY!" textFill="WHITE">
+            <Button fx:id="loginButton" maxWidth="350.0" mnemonicParsing="false" onMouseClicked="#loginPressed" prefHeight="45.0" style="-fx-background-color: #E75A7C; -fx-background-radius: 5;" text="PLAY!" textFill="WHITE">
                <VBox.margin>
                   <Insets />
                </VBox.margin>

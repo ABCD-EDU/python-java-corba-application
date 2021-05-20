@@ -11,7 +11,7 @@
 <?import javafx.scene.shape.Line?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="540.0" prefWidth="580.0" style="-fx-background-color: #F2F5EA;" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.GameController">
+<AnchorPane prefHeight="540.0" prefWidth="580.0" style="-fx-background-color: #F2F5EA;" xmlns="http://javafx.com/javafx/15.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.GameController">
    <children>
       <VBox alignment="TOP_CENTER" prefHeight="540.0" prefWidth="580.0">
          <children>
@@ -103,7 +103,7 @@
                   <Insets bottom="7.0" />
                </VBox.margin>
             </Label>
-            <TextField fx:id="answerField" prefHeight="45.0" style="-fx-background-color: #F2F5EA; -fx-border-color: #2C363F; -fx-border-width: 2; -fx-border-radius: 5;">
+            <TextField fx:id="answerField" onKeyPressed="#onEnterPress" prefHeight="45.0" style="-fx-background-color: #F2F5EA; -fx-border-color: #2C363F; -fx-border-width: 2; -fx-border-radius: 5;">
                <VBox.margin>
                   <Insets bottom="20.0" left="115.0" right="115.0" />
                </VBox.margin>

@@ -24,7 +24,7 @@
                <children>
                   <VBox alignment="TOP_CENTER" prefHeight="100.0" prefWidth="784.0" style="-fx-border-color: 2C363F; -fx-border-width: 3;">
                      <children>
-                        <Label text="Score">
+                        <Label fx:id="scoreHeader" text="Score">
                            <font>
                               <Font name="System Bold" size="20.0" />
                            </font>
@@ -33,7 +33,7 @@
                   </VBox>
                   <VBox alignment="TOP_CENTER" prefHeight="100.0" prefWidth="783.0" style="-fx-border-color: 2C363F; -fx-border-width: 3;">
                      <children>
-                        <Label text="Name">
+                        <Label fx:id="nameHeader" text="Name">
                            <font>
                               <Font name="System Bold" size="20.0" />
                            </font>

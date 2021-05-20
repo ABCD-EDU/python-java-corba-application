@@ -31,10 +31,6 @@ class ORBConnector():
             print ("Object reference is not an WordUnscramblerApp::WordUnscrambler")
             sys.exit(1)
 
-        print(self.eo.logIn("lance"))
-        print(self.eo.requestWord("lance"))
-
-
     def getEO(self):
         return self.eo
 

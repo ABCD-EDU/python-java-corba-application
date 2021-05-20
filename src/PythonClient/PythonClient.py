@@ -47,6 +47,8 @@ class GameScreen(Frame):
         Frame.__init__(self, master)
         self.controller = controller
         self.configure(bg="#F2F5EA")
+        self.gridsize = 30
+        self.grid(padx=self.gridsize)
         self.pack()
         self.createGameScreen()
 
@@ -70,9 +72,15 @@ class GameScreen(Frame):
         if (lives != 0):
             lives -= 1
             currLives = self.triesCountLabel.cget("text")
+            if lives < 2:
+                self.gridsize -= 10
+                if lives < 1:
+                    self.gridsize -= 3
+                self.grid(padx=self.gridsize)
             self.triesCountLabel['text'] = currLives + 'X'
         else:
             lives = 5
+            self.gridsize = 30
             self.resultMessageLabel['fg'] = "#F2F5EA"
             frame = self.controller.show_frame(ResultScreen.__name__)
             frame.initData(frame)
@@ -102,7 +110,8 @@ class GameScreen(Frame):
     def menuButtonPress(self):
         global currScore
         global currName
-        
+        global lives
+        lives = 5
         currName = ""
         currScore = 0
         self.controller.show_frame(SignInScreen.__name__)
@@ -236,8 +245,10 @@ class GameScreen(Frame):
             self.rerollWord()
             self.requestScore()
 
+            self.grid(padx=self.gridsize)
             self.guessEntry.delete(0,'end')
             self.triesCountLabel.configure(text="")
+            self.resultMessageLabel['fg'] = "#F2F5EA"
 
 class SignInScreen(Frame):
     def __init__(self, master=None, controller=None):
@@ -305,10 +316,12 @@ class ResultScreen(Frame):
 
         self.scoreLabel['text'] = "Final Score: {1}".format(1, currScore)
 
-    def menuButtonPress(self):
+    def exitButtonPress(self):
         global currName
         global currScore
+        global lives
 
+        lives = 5
         currName = ""
         currScore = 0
 
@@ -324,6 +337,7 @@ class ResultScreen(Frame):
             self,
             text="Final Score: 0",
             fg="#2C363F",
+            bg="#F2F5EA",
             font="Roboto 15 bold",
         )
 
@@ -334,6 +348,7 @@ class ResultScreen(Frame):
             self,
             text="GAME OVER!",
             fg="#E75A7C",
+            bg="#F2F5EA",
             font="Roboto 30 bold",
         )
 
@@ -342,7 +357,7 @@ class ResultScreen(Frame):
         self.playAgainButton = tk.Button(
             self,
             command=self.playAgainPress,
-            text="menu",
+            text="play again",
             font="Roboto 12 bold",
             bg="#F2F5EA",
             fg="#000000",
@@ -353,7 +368,7 @@ class ResultScreen(Frame):
 
         self.exitButton = tk.Button(
             self,
-            command=self.menuButtonPress,
+            command=self.exitButtonPress,
             text="exit",
             font="Roboto 12 bold",
             bg="#F2F5EA",

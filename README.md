@@ -18,7 +18,7 @@
 1. Set path using `set PYTHONPATH=<omniorbpy-path>\lib\python;<omniorbpy-path>\lib\x86_win32`
 (Where the <omniorbpy-path> environment variable is the root of your omniORB folder.)
 
-2. Run `python ClientExecutable.py`. If errors in params occur, use `python ClientExecutable.py -ORBInitRef NameService=corbaname::<ADDRESS>:<PORT>`
+2. Run `python PythonClient.py`. If errors in params occur, use `python PythonClient.py -ORBInitRef NameService=corbaname::<ADDRESS>:<PORT>`
 
 ## Compiling the Project
 #### Java Server

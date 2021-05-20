@@ -24,8 +24,18 @@ public class JavaServer {
 
     public static void main(String[] args) {
         try {
-            ORB orb = ORB.init(args, null);
-            
+            String[] params = readConfig();
+            if (args == null && params == null) {
+                System.out.println("args or .config parameters needed");
+                System.exit(0);
+            }
+            ORB orb;
+            if (args != null && params == null) {
+                orb = ORB.init(args, null);
+            } else {
+                orb = ORB.init(params, null);
+            }
+
             // get reference to rootpoa & activate the POAManager
             POA rootpoa = POAHelper.narrow(orb.resolve_initial_references("RootPOA"));
             rootpoa.the_POAManager().activate();
@@ -45,7 +55,7 @@ public class JavaServer {
             NamingContextExt ncRef = NamingContextExtHelper.narrow(objRef);
             
             // bind the Object Reference in Naming
-            String name = "Hello";
+            String name = "WordGame";
             NameComponent path[] = ncRef.to_name(name);
             ncRef.rebind(path, href);
             System.out.println("Server ready and waiting ...");
@@ -102,5 +112,27 @@ public class JavaServer {
         }
 
         return set;
+    }
+
+    private static String[] readConfig() {
+        String param = "";
+        List<String> args = new ArrayList<>();
+        String[] argConfig = null;
+        try (BufferedReader reader = new BufferedReader(new FileReader("../../../.config"))) {
+            reader.lines().map(String::valueOf).forEach(args::add);
+            for (String line : args) {
+                String[] getParam = line.split("=");
+                if (line.contains("host")) {
+                    param += "  -ORBInitialHost " + getParam[1];
+                } else if (line.contains("port")) {
+                    param += " -ORBInitialPort " + getParam[1];
+                }
+            }
+
+            argConfig = param.split("\\s");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return argConfig;
     }
 }

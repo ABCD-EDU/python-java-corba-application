@@ -3,6 +3,12 @@ import model.User;
 import org.omg.CosNaming.*;
 import org.omg.CosNaming.NamingContextPackage.*;
 import org.omg.CORBA.*;
+
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
 
 import javafx.application.Application;
@@ -27,30 +33,53 @@ public class ClientExecutable extends Application {
 
     public static void main(String[] args) {
         try {
-            // create and initialize the ORB
-            ORB orb = ORB.init(args, null);
+            String[] params = readConfig();
+            if (args == null && params == null) {
+                System.out.println("args or .config parameters needed");
+                System.exit(0);
+            }
+            ORB orb;
+            if (args != null && params == null) {
+                orb = ORB.init(args, null);
+            } else {
+                orb = ORB.init(params, null);
+            }
 
-            // get the root naming context
             org.omg.CORBA.Object objRef = orb.resolve_initial_references("NameService");
 
-            // Use NamingContextExt instead of NamingContext. This is part
-            // of the Interoperable naming Service.
             NamingContextExt ncRef = NamingContextExtHelper.narrow(objRef);
 
-            // resolve the Object Reference in Naming
-            String name = "Hello";
+            String name = "WordGame";
             impl = WordUnscramblerHelper.narrow(ncRef.resolve_str(name));
 
-            System.out.println("Client successfuly connected");
             User.impl = impl;
-
-            Scanner in = new Scanner(System.in);
-            in.nextLine();
 
             currUser = null;
             launch(args);
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    private static String[] readConfig() {
+        String param = "";
+        List<String> args = new ArrayList<>();
+        String[] argConfig = null;
+        try (BufferedReader reader = new BufferedReader(new FileReader("../../../.config"))) {
+            reader.lines().map(String::valueOf).forEach(args::add);
+            for (String line : args) {
+                String[] getParam = line.split("=");
+                if (line.contains("host")) {
+                    param += "  -ORBInitialHost " + getParam[1];
+                } else if (line.contains("port")) {
+                    param += " -ORBInitialPort " + getParam[1];
+                }
+            }
+
+            argConfig = param.split("\\s");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return argConfig;
     }
 }

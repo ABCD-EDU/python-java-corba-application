@@ -52,8 +52,6 @@ public class WordUnscramblerImpl extends WordUnscramblerPOA{
 
     @Override
     public int requestScore(String username) {
-        System.out.println(username);
-        System.out.println(JavaServer.leaderboards.size());
         return JavaServer.leaderboards.get(username);
     }
 

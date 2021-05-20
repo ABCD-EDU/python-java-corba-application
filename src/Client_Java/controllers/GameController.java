@@ -61,8 +61,7 @@ public class GameController implements Initializable {
 
     @FXML
     public void onEnterPress(KeyEvent event) {
-    if (event.getSource().equals(answerField) && event.getCode() == KeyCode.ENTER)
-        submitAnswer();
+    if (event.getCode() == KeyCode.ENTER) submitAnswer();
     }
 
     @FXML

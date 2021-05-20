@@ -7,10 +7,10 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.stage.Stage;
 import model.User;
 
-import java.awt.event.KeyEvent;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -21,6 +21,11 @@ public class MenuController implements Initializable {
     
     @FXML
     private Button loginButton;
+
+    @FXML
+    public void onEnterPress(KeyEvent event) {
+        if (event.getCode() == KeyCode.ENTER) loginPressed();
+    }
 
     @FXML
     private void loginPressed() {

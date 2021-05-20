@@ -1,8 +1,6 @@
 package server;
 
 import java.util.*;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 import WordUnscramblerApp.*;
 
@@ -16,7 +14,15 @@ public class WordUnscramblerImpl extends WordUnscramblerPOA{
     }
     
     public String requestWord(String username) {
-        for (int i = 1; i <= JavaServer.userWordStack.get(username).size(); i++) {
+        int maxSize = 0;
+
+        for (Map.Entry<Integer, Stack<String>> set : JavaServer.userWordStack.get(username).entrySet()) {
+            if (set.getKey() > maxSize) {
+                maxSize = set.getKey();
+            }
+        }
+
+        for (int i = 1; i <= maxSize; i++) {
             try {
                 String word = JavaServer.userWordStack.get(username).get(i).pop();
                 if (word != null) {

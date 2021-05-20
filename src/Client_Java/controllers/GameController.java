@@ -108,7 +108,15 @@ public class GameController implements Initializable {
         String user = User.username;
 
         String newWord = User.impl.requestWord(user);
-        wordField.setText(newWord);
+        if (newWord.equals("")) {
+            try {
+                Stage window = (Stage) menuButton.getScene().getWindow();
+                window.setScene(new Scene(FXMLLoader.load(getClass()
+                        .getResource("../resources/view/Result.fxml"))));
+                window.show();
+            } catch (IOException | NullPointerException e) {
+            }
+        }
     }
 
     private void getScore() {

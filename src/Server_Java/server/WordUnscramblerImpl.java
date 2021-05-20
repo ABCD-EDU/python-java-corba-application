@@ -21,7 +21,6 @@ public class WordUnscramblerImpl extends WordUnscramblerPOA{
                 maxSize = set.getKey();
             }
         }
-        System.out.println(maxSize);
 
         for (int i = 1; i <= maxSize; i++) {
             try {
@@ -53,6 +52,9 @@ public class WordUnscramblerImpl extends WordUnscramblerPOA{
         String scrambled = scrambleWord(word);
         while (word.equalsIgnoreCase(scrambled)) {
             scrambled = scrambleWord(word);
+            if (scrambled.isEmpty()) {
+                break;
+            }
         }
         return scrambled;
     }

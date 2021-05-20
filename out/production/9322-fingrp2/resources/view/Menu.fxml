@@ -13,12 +13,20 @@
    <children>
       <VBox alignment="CENTER" prefHeight="540.0" prefWidth="580.0">
          <children>
+            <Label fx:id="warning_label" text="Label" textFill="#d32d2d" visible="false">
+               <VBox.margin>
+                  <Insets bottom="30.0" />
+               </VBox.margin>
+               <font>
+                  <Font size="17.0" />
+               </font>
+            </Label>
             <Label text="WORD SCRAMBLER" textFill="#2c363f">
                <font>
                   <Font name="System Bold" size="36.0" />
                </font>
                <VBox.margin>
-                  <Insets bottom="55.0" />
+                  <Insets bottom="35.0" />
                </VBox.margin>
             </Label>
             <Label text="Enter your Name:" textFill="#2c363f">

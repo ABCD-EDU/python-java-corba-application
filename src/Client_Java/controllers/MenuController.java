@@ -9,6 +9,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.stage.Stage;
+import javafx.scene.control.Label;
 import model.User;
 
 import java.io.IOException;
@@ -16,6 +17,10 @@ import java.net.URL;
 import java.util.ResourceBundle;
 
 public class MenuController implements Initializable {
+
+    @FXML
+    private Label warning_label;
+
     @FXML
     private TextField loginField;
     
@@ -29,6 +34,11 @@ public class MenuController implements Initializable {
 
     @FXML
     private void loginPressed() {
+        if (loginField.getText().isEmpty()) {
+            warning_label.setText("Please fill in name field");
+            warning_label.setVisible(true);
+            return;
+        }
         String username = loginField.getText();
         model.User.username = username;
         User.impl.logIn(username);

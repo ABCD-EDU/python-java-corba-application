@@ -45,7 +45,7 @@ public class WordUnscramblerImpl extends WordUnscramblerPOA{
 
         return false;
     }
-    
+
     public String requestRescramble(String username) {
         String word = JavaServer.userWordSet.get(username);
 
@@ -85,15 +85,6 @@ public class WordUnscramblerImpl extends WordUnscramblerPOA{
         JavaServer.leaderboards.entrySet().stream()
                 .sorted(Map.Entry.comparingByValue(Comparator.reverseOrder()))
                 .forEach(scoreList::add);
-
-//        LinkedHashMap scoreList = JavaServer.leaderboards.entrySet().stream()
-//                .sorted(Map.Entry.comparingByValue(Comparator.reverseOrder()))
-//                .collect(Collectors.toMap(
-//                        Map.Entry::getKey,
-//                        Map.Entry::getValue,
-//                        (x,y)-> {throw new AssertionError();},
-//                        LinkedHashMap::new
-//                ));
 
         Map.Entry<String, Integer> score = scoreList.get(index);
         return score.getKey() + "%%%" + score.getValue();
